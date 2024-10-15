@@ -10,8 +10,9 @@ const io = require("socket.io")(3002, {
 });
 const chalk = require("chalk");
 
-const apiKey =
-  "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";
+const apiKey = process.env.OPENAI_API_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 const projectDir = __dirname; // Directorio del proyecto Hardhat
 const hardhatConfigPath = path.join(projectDir, "hardhat.config.js"); // Usar ruta absoluta
 const conclusionDirPath = path.join(projectDir, "conclusion"); // Usar ruta absoluta

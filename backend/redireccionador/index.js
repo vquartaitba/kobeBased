@@ -1,8 +1,8 @@
 const express = require("express");
 const { processInput } = require("./main");
 const cors = require("cors");
-const { deployToAvax, deployToZkEVM } = require("../solidityBranch/deployer"); // Asegúrate de que la ruta sea correcta
-const { deployToSolana } = require("../rustBranch/deployer");
+const { deployToBase } = require("../solidityBranch/deployer"); // Updated import
+// const { deployToSolana } = require("../rustBranch/deployer");
 
 const app = express();
 
@@ -33,47 +33,17 @@ app.post("/api/process", async (req, res) => {
   }
 });
 
-// Ruta para manejar el despliegue a AVAX
-app.post("/api/deploy/avax", async (req, res) => {
+// Ruta para manejar el despliegue a Base
+app.post("/api/deploy/base", async (req, res) => {
   try {
-    const deployedAddress = await deployToAvax();
+    const deployedAddress = await deployToBase();
     if (deployedAddress) {
       res.json({ deployedAddress });
     } else {
-      res.status(500).json({ error: "Failed to deploy contract on AVAX" });
+      res.status(500).json({ error: "Failed to deploy contract on Base" });
     }
   } catch (error) {
-    console.error("Error en el despliegue en AVAX:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Ruta para manejar el despliegue a zkEVM
-app.post("/api/deploy/zkEVM", async (req, res) => {
-  try {
-    const deployedAddress = await deployToZkEVM();
-    if (deployedAddress) {
-      res.json({ deployedAddress });
-    } else {
-      res.status(500).json({ error: "Failed to deploy contract on zkEVM" });
-    }
-  } catch (error) {
-    console.error("Error en el despliegue en zkEVM:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Ruta para manejar el despliegue a solana
-app.post("/api/deploy/solana", async (req, res) => {
-  try {
-    const deployedAddress = await deployToSolana();
-    if (deployedAddress) {
-      res.json({ deployedAddress });
-    } else {
-      res.status(500).json({ error: "Failed to deploy contract on solana" });
-    }
-  } catch (error) {
-    console.error("Error en el despliegue en solana:", error);
+    console.error("Error en el despliegue en Base:", error);
     res.status(500).json({ error: error.message });
   }
 });

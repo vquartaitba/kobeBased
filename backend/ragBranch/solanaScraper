@@ -3,11 +3,9 @@ const cheerio = require("cheerio");
 const { createClient } = require("@supabase/supabase-js");
 const OpenAI = require("openai");
 
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhanJ2aHp1aXN2ZmRxa29idmVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUzMzk2MTYsImV4cCI6MjA0MDkxNTYxNn0.-G0lcOSpmmQTcAjrdXkvdNDit07iSDJDbYI-XwtR1FA";
-const OPENAI_API_KEY =
-  "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";
-const SUPABASE_URL = "https://eajrvhzuisvfdqkobved.supabase.co";
+const apiKey = process.env.OPENAI_API_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });

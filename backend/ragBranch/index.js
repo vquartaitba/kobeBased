@@ -6,12 +6,9 @@ require("dotenv").config({
   path: require("path").resolve(__dirname, "../.env"),
 });
 
-OPENAI_API_KEY =
-  "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";
-SUPABASE_URL = "https://ybhsjkqmupilscnwsqve.supabase.co";
-SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InliaHNqa3FtdXBpbHNjbndzcXZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ0NzMzOTcsImV4cCI6MjA0MDA0OTM5N30._FEslAFYmUJO5lV1GCu8rfe-yghETtdNc2saJlukVOM";
-
+const apiKey = process.env.OPENAI_API_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

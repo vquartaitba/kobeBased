@@ -1,77 +1,93 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("SoccerGame Contract", function () {
-    let SoccerGame, soccerGame, owner, addr1, addr2;
+describe("SoccerGame", function () {
+  let SoccerGame;
+  let soccerGame;
+  let owner;
+  let addr1;
+  let teamAPlayers = ["Alice", "Bob", "Charlie"];
+  let teamBPlayers = ["Dave", "Eve", "Frank"];
 
-    beforeEach(async function () {
-        [owner, addr1, addr2] = await ethers.getSigners();
-        
-        SoccerGame = await ethers.getContractFactory("SoccerGame");
-        soccerGame = await SoccerGame.deploy();
-        await soccerGame.waitForDeployment();
+  beforeEach(async function () {
+    [owner, addr1] = await ethers.getSigners();
+    SoccerGame = await ethers.getContractFactory("SoccerGame");
+    soccerGame = await SoccerGame.deploy(teamAPlayers, teamBPlayers);
+    await soccerGame.waitForDeployment();
+  });
+
+  describe("Deployment", function () {
+    it("Should set the correct owner", async function () {
+      expect(await soccerGame.owner()).to.equal(owner.address);
     });
 
-    it("Should register a player", async function () {
-        await expect(soccerGame.registerPlayer(1, "TeamA"))
-            .to.emit(soccerGame, "PlayerRegistered")
-            .withArgs(1, "TeamA");
+    it("Should initialize teams correctly", async function () {
+      const teamA = await soccerGame.teamA();
+      const teamB = await soccerGame.teamB();
+      expect(teamA.name).to.equal("Team A");
+      expect(teamB.name).to.equal("Team B");
+      expect(teamA.score).to.equal(0);
+      expect(teamB.score).to.equal(0);
+    });
+  });
 
-        const player = await soccerGame.players(1);
-        expect(player.playerId).to.equal(1);
-        expect(player.team).to.equal("TeamA");
+  describe("Game flow", function () {
+    it("Should allow owner to start the game", async function () {
+      await soccerGame.startGame();
+      expect(await soccerGame.gameStarted()).to.equal(true);
     });
 
-    it("Should setup a match", async function () {
-        await expect(soccerGame.setupMatch(1, "TeamA", "TeamB", "2023-01-01", "Scheduled"))
-            .to.emit(soccerGame, "MatchSetup")
-            .withArgs(1, "TeamA", "TeamB", "2023-01-01", "Scheduled");
-
-        const soccerMatch = await soccerGame.matches(1);
-        expect(soccerMatch.matchId).to.equal(1);
-        expect(soccerMatch.teamA).to.equal("TeamA");
-        expect(soccerMatch.teamB).to.equal("TeamB");
-        expect(soccerMatch.date).to.equal("2023-01-01");
-        expect(soccerMatch.status).to.equal("Scheduled");
+    it("Should emit GameStarted event when game starts", async function () {
+      await expect(soccerGame.startGame())
+        .to.emit(soccerGame, "GameStarted");
     });
 
-    it("Should update score", async function () {
-        await soccerGame.setupMatch(1, "TeamA", "TeamB", "2023-01-01", "Scheduled");
-
-        await expect(soccerGame.updateScore(1, "TeamA", 2))
-            .to.emit(soccerGame, "ScoreUpdated")
-            .withArgs(1, "TeamA", 2);
-
-        const soccerMatch = await soccerGame.matches(1);
-        expect(soccerMatch.scoreTeamA).to.equal(2);
-
-        await expect(soccerGame.updateScore(1, "TeamB", 3))
-            .to.emit(soccerGame, "ScoreUpdated")
-            .withArgs(1, "TeamB", 3);
-
-        expect((await soccerGame.matches(1)).scoreTeamB).to.equal(3);
+    it("Should update score and emit GoalScored event", async function () {
+      await soccerGame.startGame();
+      await expect(soccerGame.updateScore("Team A", 1))
+        .to.emit(soccerGame, "GoalScored")
+        .withArgs("Team A", 1);
+      
+      const teamA = await soccerGame.teamA();
+      expect(teamA.score).to.equal(1);
     });
 
-    it("Should finalize match", async function () {
-        await soccerGame.setupMatch(1, "TeamA", "TeamB", "2023-01-01", "Scheduled");
-        await soccerGame.updateScore(1, "TeamA", 1);
-        await soccerGame.updateScore(1, "TeamB", 2);
-
-        await expect(soccerGame.finalizeMatch(1))
-            .to.emit(soccerGame, "MatchCompleted")
-            .withArgs(1, "TeamB");
-
-        const soccerMatch = await soccerGame.matches(1);
-        expect(soccerMatch.completed).to.be.true;
+    it("Should allow owner to end the game and emit GameEnded event", async function () {
+      await soccerGame.startGame();
+      await soccerGame.updateScore("Team A", 1);
+      await expect(soccerGame.endGame())
+        .to.emit(soccerGame, "GameEnded")
+        .withArgs("Team A");
+      expect(await soccerGame.gameStarted()).to.equal(false);
     });
 
-    it("Should return scores", async function () {
-        await soccerGame.setupMatch(1, "TeamA", "TeamB", "2023-01-01", "Scheduled");
-        await soccerGame.updateScore(1, "TeamA", 2);
-        await soccerGame.updateScore(1, "TeamB", 3);
+    it("Should declare correct winner", async function () {
+      await soccerGame.startGame();
+      await soccerGame.updateScore("Team A", 2);
+      await soccerGame.updateScore("Team B", 1);
+      expect(await soccerGame.declareWinner()).to.equal("Team A");
 
-        const scores = await soccerGame.getScores(1);
-        expect(scores[0]).to.equal(2);
-        expect(scores[1]).to.equal(3);
+      await soccerGame.updateScore("Team B", 2);
+      expect(await soccerGame.declareWinner()).to.equal("Team B");
+
+      await soccerGame.updateScore("Team A", 1);
+      expect(await soccerGame.declareWinner()).to.equal("It's a draw!");
     });
+  });
+
+  describe("Access control", function () {
+    it("Should revert if non-owner tries to start game", async function () {
+      await expect(soccerGame.connect(addr1).startGame()).to.be.revertedWith("Only the owner can perform this action");
+    });
+
+    it("Should revert if game is not started and updateScore or endGame is called", async function () {
+      await expect(soccerGame.updateScore("Team A", 1)).to.be.revertedWith("Game is not started yet");
+      await expect(soccerGame.endGame()).to.be.revertedWith("Game is not started yet");
+    });
+
+    it("Should revert if invalid team name is used in updateScore", async function () {
+      await soccerGame.startGame();
+      await expect(soccerGame.updateScore("Invalid Team", 1)).to.be.revertedWith("Invalid team name");
+    });
+  });
 });

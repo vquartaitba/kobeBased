@@ -1,18 +1,17 @@
 require("@nomicfoundation/hardhat-toolbox");
-const PRIVATE_KEY = "fcb28ffde498964732926eab25bba819c1eb23523c7d39c14ac646a19f0ddccd";
+require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.0",
   networks: {
-      zkEVM: {
-      url: `https://rpc.cardona.zkevm-rpc.com`,
-      accounts: [PRIVATE_KEY],
-      },
-      avax: {
-        url: `https://api.avax-test.network/ext/bc/C/rpc`,
-        accounts: [PRIVATE_KEY],
-        },
+    sepolia: {
+      url: process.env.SEPOLIA_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
   },
-  };
-  
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+};

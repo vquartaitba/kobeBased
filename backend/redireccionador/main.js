@@ -9,9 +9,12 @@ const { generateRustSmartContract } = require(path.join(
   "../rustBranch/main"
 ));
 const { handleQuery } = require(path.join(__dirname, "../ragBranch/index")); // Importa la función handleQuery
-// require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
-const apiKey =
-  "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";
+require("dotenv").config();
+
+const apiKey = process.env.OPENAI_API_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+
 // Función para generar una instrucción concisa usando un LLM
 async function generateConciseInstruction(input) {
   try {
@@ -190,9 +193,7 @@ async function processInput(input) {
   if (answer.includes(1)) {
     result += (await codigoSOLIDITY(input)) + "/n";
   }
-  if (answer.includes(2)) {
-    result += (await codigoSOLANA(input)) + "/n";
-  }
+  // Comment out or remove the Solana-specific code (answer.includes(2))
   if (answer.includes(3)) {
     result += (await RAGMODEL(input)) + "/n";
   }

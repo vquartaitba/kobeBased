@@ -2,9 +2,9 @@
 
 ## Presentation
 
-[Kobe - Presentation]([https://www.figma.com/slides/tmOQDZXXDg6shYu2XgL9BQ/kobe-deck-base?node-id=1-305&node-type=slide](https://www.figma.com/deck/UeDJVwaaKfwmjrHCc4c9PO/kobe-deck-base?node-id=1-305&node-type=slide&t=IWjEYCshXFGZXHZn-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1))
+[Kobe - Presentation]([https://www.figma.com/deck/UeDJVwaaKfwmjrHCc4c9PO/kobe-deck-base?node-id=1-305&node-type=slide&t=IWjEYCshXFGZXHZn-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1]
 
-[Video introducing Kobe](https://www.youtube.com/watch?v=zvIfosxRu8A)
+[Video introducing Kobe](https://www.youtube.com/watch?v=Vcd_Xagnitg)
 
 ## Description
 

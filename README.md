@@ -44,7 +44,7 @@ Make sure you have the following tools installed on your system:
      ```bash
      curl -o- https://cli.base.org/install.sh | bash
      ```
-     More details can be found in the official documentation: [Base CLI - download](https://docs.base.org/cli/install-base-cli-tools).
+     More details can be found in the official documentation: [Base CLI - download](https://docs.base.org/docs/).
 
 4. **Solidity**: Ensure that the Solidity compiler is available in your environment, as Base smart contracts are written in Solidity.
    - Install Solidity by running:

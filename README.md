@@ -2,7 +2,7 @@
 
 ## Presentation
 
-[Kobe - Presentation](https://www.figma.com/deck/UeDJVwaaKfwmjrHCc4c9PO/kobe-deck-base?node-id=1-305&node-type=slide&t=IWjEYCshXFGZXHZn-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1)
+[Kobe - Presentation](https://drive.google.com/file/d/1HheWwN2fRFbPnCtdAUdhIdxd1DHodKHF/view)
 
 [Video introducing Kobe](https://www.youtube.com/watch?v=Vcd_Xagnitg)
 

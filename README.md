@@ -40,7 +40,7 @@ Make sure you have the following tools installed on your system:
      ```
 
 3. **Base**: Required to interact with the Base blockchain, including compiling and deploying contracts.
-   - Follow [These steps](https://docs.base.org/docs/quickstart) to run and deploy smart contracts on Base.
+   - Follow [These steps](https://docs.base.org/docs/quickstart) to run and deploy smart contracts on Base and connect the frontend.
    - Alternatively, check [Base github](https://github.com/base-org)
      
      More details can be found in the official documentation: [Base - Documentation](https://docs.base.org/docs).

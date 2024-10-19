@@ -39,12 +39,10 @@ Make sure you have the following tools installed on your system:
      npm install -g yarn
      ```
 
-3. **Base CLI**: Required to interact with the Base blockchain, including compiling and deploying contracts.
-   - Install the Base CLI by running:
-     ```bash
-     curl -o- https://cli.base.org/install.sh | bash
-     ```
-     More details can be found in the official documentation: [Base - Run and deploy](https://docs.base.org/docs/quickstart).
+3. **Base**: Required to interact with the Base blockchain, including compiling and deploying contracts.
+   - Follow [These steps](https://docs.base.org/docs/quickstart) to run and deploy smart contracts on Base.
+   - Alternatively, check [Base github](https://github.com/base-org)
+     More details can be found in the official documentation: [Base - Documentation](https://docs.base.org/docs).
 
 4. **Solidity**: Ensure that the Solidity compiler is available in your environment, as Base smart contracts are written in Solidity.
    - Install Solidity by running:
